@@ -9,6 +9,19 @@ namespace LW4
         private int n;
         private double[,] matrix;
 
+        // GoRN
+        private void RandomEl (double min, double max) 
+        { 
+            Random random = new Random();
+            for (int i = 0; i < n; i++) 
+            {
+                for (int j = 0; j < n; j++) 
+                {
+                    matrix[i, j] = (random.NextDouble() + min) % max;
+                }
+            }
+        }
+        
         // Constructor
         public MyMatrix(int m, int n)
         {
@@ -29,6 +42,5 @@ namespace LW4
             Console.WriteLine("Enter max value for elements: ");
             double max = double.Parse(Console.ReadLine());
         }
-
     }
 }
