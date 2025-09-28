@@ -34,26 +34,44 @@ namespace LW4
 
             // filling elements w rand values
             Random random = new Random();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < m; i++)
                 for (int j = 0; j < n; j++)
-                    matrix[i, j] = (random.NextDouble() + min) % max;
+                    matrix[i, j] = random.NextDouble() * (max - min) + min;
         }
+
+        // constructor for tests
+        public MyMatrix(int m, int n, double min, double max)
+        {
+            if (m <= 0 || n <= 0)
+                throw new ArgumentException("Count of m and n must be > 0");
+
+            this.m = m;
+            this.n = n;
+            matrix = new double[m, n];
+
+            Random random = new Random();
+            for (int i = 0; i < m; i++)
+                for (int j = 0; j < n; j++)
+                    matrix[i, j] = random.NextDouble() * (max - min) + min;
+        }
+
+        // Properties for values
+        public int Rows => m;
+        public int Columns => n;
 
         // user indexator
         public double this[int row, int col]
         {
-            get 
+            get
             {
                 if (row < 0 || row >= m || col < 0 || col >= n)
                     throw new IndexOutOfRangeException("Oops! Index out of range");
-
                 return matrix[row, col];
             }
             set
             {
                 if (row < 0 || row >= m || col < 0 || col >= n)
                     throw new IndexOutOfRangeException("Oops! Index out of range");
-
                 matrix[row, col] = value;
             }
         }
