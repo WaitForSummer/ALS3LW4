@@ -85,7 +85,7 @@ namespace LW4
                 throw new InvalidOperationException("You can only summarize matrices of the same size.");
 
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n);
+            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
 
             // summary 
             for (int i = 0; i < a.m; i++)
@@ -103,7 +103,7 @@ namespace LW4
             if (a.n != b.n || a.m != b.m) 
                 throw new InvalidOperationException("You can only substract mattrices of the same size.");
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n);
+            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
 
             // summary 
             for (int i = 0; i < a.m; i++)
@@ -118,12 +118,12 @@ namespace LW4
         public static MyMatrix operator*(MyMatrix a, double num)
         {
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n);
+            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
 
             // multiplying
             for (int i = 0; i < a.m; i++)
                 for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = num * a.matrix[i, j];
+                    newMatrix.matrix[i, j] = a.matrix[i, j] * num;
 
             // returning result
             return newMatrix;
@@ -132,9 +132,7 @@ namespace LW4
         // overriden multiplying by number (number from the left side)
         public static MyMatrix operator *(double num, MyMatrix a)
         {
-            MyMatrix newMatrix = a * num;
-
-            return newMatrix;
+            return a * num;
         }
 
         // overriden dividing by number
@@ -144,12 +142,12 @@ namespace LW4
             if (num == 0)
                 throw new DivideByZeroException("Sudenly, you can't divide by zero(((");
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n);
+            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
 
             // multiplying
             for (int i = 0; i < a.m; i++)
                 for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = num / a.matrix[i, j];
+                    newMatrix.matrix[i, j] = a.matrix[i, j] / num;
 
             // returning result
             return newMatrix;
@@ -163,7 +161,7 @@ namespace LW4
                 throw new InvalidOperationException("Wrong matrix to multiplying");
 
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n);
+            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
 
             // multiplying
             for (int i = 0; i < a.m; ++i)
@@ -178,6 +176,19 @@ namespace LW4
                 }
             }
             return newMatrix;
+        }
+
+        // method for outputting result
+        public void Print()
+        {
+            for (int i = 0; i < m; ++i)
+            {
+                for (int j = 0; j <  n; ++j)
+                {
+                    Console.WriteLine($"{matrix[i, j]:F2}\t");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
