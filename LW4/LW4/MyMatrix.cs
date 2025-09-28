@@ -185,7 +185,7 @@ namespace LW4
             {
                 for (int j = 0; j <  n; ++j)
                 {
-                    Console.WriteLine($"{matrix[i, j]:F2}\t");
+                    Console.Write($"{matrix[i, j]:F2}\t");
                 }
                 Console.WriteLine();
             }
