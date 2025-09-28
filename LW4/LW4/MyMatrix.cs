@@ -161,7 +161,7 @@ namespace LW4
                 throw new InvalidOperationException("Wrong matrix to multiplying");
 
             // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
+            MyMatrix newMatrix = new MyMatrix(a.m, b.n, 0, 0);
 
             // multiplying
             for (int i = 0; i < a.m; ++i)
