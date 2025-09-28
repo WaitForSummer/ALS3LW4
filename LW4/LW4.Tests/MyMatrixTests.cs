@@ -241,10 +241,10 @@ namespace LW4.Tests
 
             matrix2[0, 0] = 7;
             matrix2[0, 1] = 8;
-            matrix2[0, 2] = 9;
-            matrix2[1, 0] = 10;
-            matrix2[1, 1] = 11;
-            matrix2[1, 2] = 12;
+            matrix2[1, 0] = 9;
+            matrix2[1, 1] = 10;
+            matrix2[2, 0] = 11;
+            matrix2[2, 1] = 12;
 
             var res = matrix1 * matrix2;
 
