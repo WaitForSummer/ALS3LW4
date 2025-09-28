@@ -24,33 +24,39 @@ namespace LW4.Console
             rows = int.Parse(System.Console.ReadLine());
 
             MyMatrix mm2 = new MyMatrix(rows, columns);
+            
+            System.Console.WriteLine("\nMatrix 1: ");
+            mm1.Print();
+
+            System.Console.WriteLine("\nMatrix 2: ");
+            mm2.Print();
 
             MyMatrix resM = mm1 + mm2;
-            System.Console.WriteLine($"Result of summaryzing matrices: ");
+            System.Console.WriteLine($"\nResult of summaryzing matrices: ");
             resM.Print();
 
             resM = mm1 - mm2;
-            System.Console.WriteLine($"Result of substracting matrices: ");
+            System.Console.WriteLine($"\nResult of substracting matrices: ");
             resM.Print();
 
             resM = mm1 * 2;
-            System.Console.WriteLine($"Result of multiplying the first matrix by number: ");
+            System.Console.WriteLine($"\nResult of multiplying the first matrix by number: ");
             resM.Print();
 
             resM = 5 * mm2;
-            System.Console.WriteLine($"Result of multiplying the second matrix by number: ");
+            System.Console.WriteLine($"\nResult of multiplying the second matrix by number: ");
             resM.Print();
 
             resM = mm1 / 5;
-            System.Console.WriteLine($"Result of dividing the first matrix by number: ");
+            System.Console.WriteLine($"\nResult of dividing the first matrix by number: ");
             resM.Print();
 
             resM = mm2 / 5;
-            System.Console.WriteLine($"Result of dividing the second matrix by number: ");
+            System.Console.WriteLine($"\nResult of dividing the second matrix by number: ");
             resM.Print();
 
             resM = mm1 * mm2;
-            System.Console.WriteLine($"Result of multiplying matrices: "); 
+            System.Console.WriteLine($"\nResult of multiplying matrices: "); 
             resM.Print();
         }
 
