@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LW4", "LW4\LW4.csproj", "{5586DA3C-9497-4F30-8CDC-86E12B59C405}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LW4.Console", "LW4.Console\LW4.Console.csproj", "{A355F1A5-B352-48FA-A2BB-43AC32377F40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5586DA3C-9497-4F30-8CDC-86E12B59C405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5586DA3C-9497-4F30-8CDC-86E12B59C405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5586DA3C-9497-4F30-8CDC-86E12B59C405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A355F1A5-B352-48FA-A2BB-43AC32377F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A355F1A5-B352-48FA-A2BB-43AC32377F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A355F1A5-B352-48FA-A2BB-43AC32377F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A355F1A5-B352-48FA-A2BB-43AC32377F40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
