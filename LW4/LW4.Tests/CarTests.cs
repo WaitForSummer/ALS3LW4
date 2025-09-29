@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace LW4.Tests
 {
@@ -70,7 +69,7 @@ namespace LW4.Tests
         public void CarComparer_SortByName_AscendingOrder()
         {
             var comparer = new CarComparer(CarComparer.SortBy.Name);
-            var exceptedOrder = new[] { "Audi", "BMW", "Honda", "Nercedes", "Toyota" };
+            var exceptedOrder = new[] { "Audi", "BMW", "Honda", "Mercedes", "Toyota" };
 
             Array.Sort(testCars, comparer);
 
@@ -120,7 +119,7 @@ namespace LW4.Tests
 
             var res = comparer.Compare(validCar, nullCar);
 
-            Assert.IsTrue(res < 0);
+            Assert.IsTrue(res > 0);
         }
 
         // testing sort the second car is null
@@ -184,6 +183,287 @@ namespace LW4.Tests
             {
                 Assert.AreEqual(2020, car.Year);
             }
+        }
+    }
+
+    // testing car catalog
+    [TestClass]
+    public class CarCatalogTests
+    {
+        private Car[] testCars;
+        private CarCatalog carCatalog;
+
+        // testing initializing
+        [TestInitialize]
+        public void Setup()
+        {
+            testCars = new Car[]
+            {
+                new Car("Toyota Camry", 2020, 210),
+                new Car("BMW X5", 2018, 250),
+                new Car("Audi A4", 2022, 240),
+                new Car("Honda Civic", 2019, 200),
+                new Car("Mercedes C-Class", 2021, 230),
+                new Car("Ford Focus", 2018, 190),
+                new Car("Tesla Model 3", 2022, 260),
+                new Car("Volkswagen Golf", 2020, 220)
+            };
+
+            carCatalog = new CarCatalog(testCars);
+        }
+
+        // testing constructor
+        [TestMethod]
+        public void CarCatalog_ConstructorIsCorrectlyWork()
+        {
+            Car[] testCars = new Car[]
+            {
+                new Car("Toyota", 2020, 200),
+                new Car("BMW", 2018, 250),
+                new Car("Audi", 2022, 240),
+                new Car("Honda", 2019, 180),
+                new Car("Mercedes", 2021, 230)
+            };
+            CarCatalog testCarCatalog = new CarCatalog(testCars);
+
+            var exceptedNames = new string[] { "Toyota", "BMW", "Audi", "Honda", "Mercedes" };
+            var exceptedYears = new int[] { 2020, 2018, 2022, 2019, 2021 };
+            var exceptedMaxSpeeds = new int[] { 200, 250, 240, 180, 230 };
+
+            for (int i = 0; i < testCars.Length; i++)
+            {
+                Assert.AreEqual(exceptedNames[i], testCarCatalog[i].Name);
+                Assert.AreEqual(exceptedYears[i], testCarCatalog[i].Year);
+                Assert.AreEqual(exceptedMaxSpeeds[i], testCarCatalog[i].Speed);
+            }
+        }
+
+        // testing constructor for exception
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CarCatalog_AcceptingIncorrectArgument_ShouldGiveException()
+        {
+            var testCarCatalog = new CarCatalog(null);
+        }
+
+        // testing GetEnumerator
+        [TestMethod]
+        public void CarCatalog_GetEnumerator_ReturnsAllCarsInOrder()
+        {
+            var expectedNames = testCars.Select(c => c.Name).ToArray();
+
+            var res = new List<string>();
+            foreach (var car in carCatalog)
+            {
+                res.Add(car.Name);
+            }
+
+            CollectionAssert.AreEqual(expectedNames, res);
+        }
+
+        // testing reverse
+        [TestMethod]
+        public void CarCatalog_Reverse_ReturnsCarsInReverseOrder()
+        {
+            var expectedNames = testCars.Select(c => c.Name).Reverse().ToArray();
+
+            var res = new List<string>();
+            foreach(var car in carCatalog.Reverse())
+            {
+                res.Add(car.Name);
+            }
+
+            CollectionAssert.AreEqual(expectedNames, res);
+        }
+
+        // testing filter by year
+        [TestMethod]
+        public void FilterByYear_ExistingYear_ReturnsCorrectCars()
+        {
+            int targetYear = 2020;
+
+            var res = new List<Car>();
+            foreach (var car in carCatalog.FilterByProductionYear(targetYear)) 
+            {
+                res.Add(car);
+            }
+
+            Assert.AreEqual(2, res.Count);
+            foreach (var car in res)
+            {
+                Assert.AreEqual(targetYear, car.Year);
+            }
+        }
+
+        // testing filter by not existing year
+        [TestMethod]
+        public void FilterByYear_NotExistingYear_ReturnsEmptyCollection()
+        {
+            int targetYear = 1990;
+
+            var res = new List<Car>();
+            foreach (var car in carCatalog.FilterByProductionYear(targetYear))
+            {
+                res.Add(car);
+            }
+
+            Assert.AreEqual(0, res.Count);
+        }
+
+        // testing filter by year valid range
+        [TestMethod]
+        public void FilterByProductionYearRange_ValidRange_ReturnsCorrectCars()
+        {
+            int startYear = 2019;
+            int endYear = 2021;
+
+            var result = new List<Car>();
+            foreach (var car in carCatalog.FilterByProductionYearRange(startYear, endYear))
+            {
+                result.Add(car);
+            }
+
+            Assert.AreEqual(4, result.Count);
+            foreach (var car in result)
+            {
+                Assert.IsTrue(car.Year >= startYear);
+                Assert.IsTrue(car.Year <= endYear);
+            }
+        }
+
+        // testing filter by speed 
+        [TestMethod]
+        public void FilterByMaxSpeed_ValidSpeed_ReturnsCorrectCars()
+        {
+            
+            int minSpeed = 230;
+
+            
+            var result = new List<Car>();
+            foreach (var car in carCatalog.FilterByMaxSpeed(minSpeed))
+            {
+                result.Add(car);
+            }
+
+            // Assert
+            Assert.AreEqual(4, result.Count);
+            foreach (var car in result)
+            {
+                Assert.IsTrue(car.Speed >= minSpeed);
+            }
+        }
+
+        [TestMethod]
+        public void FilterByMaxSpeedRange_ValidRange_ReturnsCorrectCars()
+        {
+            
+            int minSpeed = 200;
+            int maxSpeed = 230;
+
+            
+            var result = new List<Car>();
+            foreach (var car in carCatalog.FilterByMaxSpeedRange(minSpeed, maxSpeed))
+            {
+                result.Add(car);
+            }
+
+            // Assert
+            Assert.AreEqual(4, result.Count);
+            foreach (var car in result)
+            {
+                Assert.IsTrue(car.Speed >= minSpeed);
+                Assert.IsTrue(car.Speed <= maxSpeed);
+            }
+        }
+
+        [TestMethod]
+        public void FilterByName_ExistingName_ReturnsCorrectCars()
+        {
+            
+            string searchTerm = "a";
+
+            
+            var result = new List<Car>();
+            foreach (var car in carCatalog.FilterByName(searchTerm))
+            {
+                result.Add(car);
+            }
+
+            // Assert
+            Assert.IsTrue(result.Count > 0);
+            foreach (var car in result)
+            {
+                Assert.IsTrue(car.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+
+        [TestMethod]
+        public void FilterByName_NonExistingName_ReturnsEmptyCollection()
+        {
+            
+            string searchTerm = "XYZ";
+
+            
+            var result = new List<Car>();
+            foreach (var car in carCatalog.FilterByName(searchTerm))
+            {
+                result.Add(car);
+            }
+
+            // Assert
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        public void MultipleIterators_WorkIndependently()
+        {
+            
+            var forwardResults = new List<string>();
+            var reverseResults = new List<string>();
+
+            
+            foreach (var car in carCatalog)
+            {
+                forwardResults.Add(car.Name);
+            }
+
+            foreach (var car in carCatalog.Reverse())
+            {
+                reverseResults.Add(car.Name);
+            }
+
+            // Assert
+            Assert.AreEqual(testCars.Length, forwardResults.Count);
+            Assert.AreEqual(testCars.Length, reverseResults.Count);
+            CollectionAssert.AreEqual(forwardResults.AsEnumerable().Reverse().ToList(), reverseResults);
+        }
+
+        [TestMethod]
+        public void EmptyCatalog_AllIterators_ReturnNoElements()
+        {
+            
+            var emptyCatalog = new CarCatalog(new Car[0]);
+
+            int count = 0;
+            foreach (var car in emptyCatalog)
+            {
+                count++;
+            }
+            Assert.AreEqual(0, count);
+
+            count = 0;
+            foreach (var car in emptyCatalog.Reverse())
+            {
+                count++;
+            }
+            Assert.AreEqual(0, count);
+
+            count = 0;
+            foreach (var car in emptyCatalog.FilterByProductionYear(2020))
+            {
+                count++;
+            }
+            Assert.AreEqual(0, count);
         }
     }
 }
