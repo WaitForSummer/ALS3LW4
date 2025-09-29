@@ -23,7 +23,7 @@ namespace LW4.Console
             System.Console.WriteLine("\nPlease, enter number of rows for the second matrix: ");
             rows = int.Parse(System.Console.ReadLine());
 
-            System.Console.WriteLine("Please, enter number of columns for the second matrix: ");
+            System.Console.WriteLine("\nPlease, enter number of columns for the second matrix: ");
             rows = int.Parse(System.Console.ReadLine());
 
             MyMatrix mm2 = new MyMatrix(rows, columns);
@@ -61,11 +61,17 @@ namespace LW4.Console
             resM = mm1 * mm2;
             System.Console.WriteLine($"\nResult of multiplying matrices: "); 
             resM.Print();
+
+            System.Console.WriteLine("\nEnding of the first task...");
+            System.Console.WriteLine("Press any key to start the second task...");
+            System.Console.ReadKey();
+            System.Console.Clear();
         }
 
         public static void Task2()
         {
             // Demonstrating work for the second task
+            System.Console.WriteLine("=== Starting task 2 ===\n");
             // initialize variables
             // array of cars
             Car[] cars =
