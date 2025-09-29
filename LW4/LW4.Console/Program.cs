@@ -11,15 +11,16 @@ namespace LW4.Console
         public static void Task1()
         {
             // demostrating work of program for task 1
+            System.Console.WriteLine("=== Starting task 1 ===\n");
             System.Console.WriteLine("Please, enter number of rows for the first matrix: ");
             int rows = int.Parse(System.Console.ReadLine());
 
-            System.Console.WriteLine("Please, enter number of columns for the first matrix: ");
+            System.Console.WriteLine("\nPlease, enter number of columns for the first matrix: ");
             int columns = int.Parse(System.Console.ReadLine());
 
             MyMatrix mm1 = new MyMatrix(rows, columns);
 
-            System.Console.WriteLine("Please, enter number of rows for the second matrix: ");
+            System.Console.WriteLine("\nPlease, enter number of rows for the second matrix: ");
             rows = int.Parse(System.Console.ReadLine());
 
             System.Console.WriteLine("Please, enter number of columns for the second matrix: ");
@@ -110,7 +111,7 @@ namespace LW4.Console
             System.Console.WriteLine("\n=== Sort by Year reverse ===");
             Array.Sort(cars, new CarComparer(CarComparer.SortBy.Year));
             Array.Reverse(cars);
-            for (int i = 0; i <= cars.Length; i++) 
+            for (int i = 0; i < cars.Length; i++) 
             {
                 System.Console.WriteLine(cars[i].ToString());
             }
