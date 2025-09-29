@@ -135,5 +135,55 @@ namespace LW4.Tests
 
             Assert.IsTrue(result > 0);
         }
+
+        // testing campare w both null obj
+        [TestMethod]
+        public void CarComparer_Compare_BothNull_ReturnsZero()
+        {
+            var comparer = new CarComparer(CarComparer.SortBy.Name);
+            Car nullCar1 = null;
+            Car nullCar2 = null;
+
+            var result = comparer.Compare(nullCar1, nullCar2);
+
+            Assert.AreEqual(0, result);
+        }
+
+        // test for campare w same names
+        [TestMethod]
+        public void CarComparer_SortByName_WithDuplicateNames()
+        {
+            var carsWithDuplicates = new Car[]
+            {
+                new Car("BMW", 2020, 200),
+                new Car("Audi", 2019, 220),
+                new Car("BMW", 2021, 240)
+            };
+            var comparer = new CarComparer(CarComparer.SortBy.Name);
+
+            Array.Sort(carsWithDuplicates, comparer);
+
+            Assert.AreEqual("Audi", carsWithDuplicates[0].Name);
+        }
+
+        // testing compare objects w same year
+        [TestMethod]
+        public void CarComparer_SortByYear_WithSameYears()
+        {
+            var carsWithSameYear = new Car[]
+            {
+                new Car("Car1", 2020, 200),
+                new Car("Car2", 2020, 220),
+                new Car("Car3", 2020, 180)
+            };
+            var comparer = new CarComparer(CarComparer.SortBy.Year);
+
+            Array.Sort(carsWithSameYear, comparer);
+
+            foreach (var car in carsWithSameYear)
+            {
+                Assert.AreEqual(2020, car.Year);
+            }
+        }
     }
 }
