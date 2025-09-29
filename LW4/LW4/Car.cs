@@ -71,6 +71,23 @@ namespace LW4
             this.cars = cars ?? throw new ArgumentNullException(nameof(cars));
         }
 
+        // overriden user indexator
+        public Car this[int ind]
+        {
+            get
+            {
+                if (ind < 0 || ind >= cars.Length)
+                    throw new ArgumentOutOfRangeException("Oops! Index  Out of range");
+                return cars[ind];
+            }
+            set 
+            { 
+                if (ind < 0 || ind >= cars.Length)
+                    throw new ArgumentOutOfRangeException("Oops! Index out of range");
+                cars[ind] = value;
+            }
+        }
+
         // foreach from the first to last
         public IEnumerator<Car> GetEnumerator()
         {
