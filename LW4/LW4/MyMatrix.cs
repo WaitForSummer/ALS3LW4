@@ -25,11 +25,11 @@ namespace LW4
             matrix = new double[m, n];
 
             // Entering min value
-            Console.WriteLine("Enter min value for elements: ");
+            Console.WriteLine("\nEnter min value for elements: ");
             double min = double.Parse(Console.ReadLine());
 
             // Entering max value
-            Console.WriteLine("Enter max value for elements: ");
+            Console.WriteLine("\nEnter max value for elements: ");
             double max = double.Parse(Console.ReadLine());
 
             // filling elements w rand values
