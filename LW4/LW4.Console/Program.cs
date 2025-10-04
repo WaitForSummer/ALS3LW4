@@ -1,125 +1,187 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices.Marshalling;
-using LW4;
-
-namespace LW4.Console
+﻿namespace LW4.Console
 {
-
     public class Program
     {
         public static void Task1()
         {
-            // demostrating work of program for task 1
-            System.Console.WriteLine("=== Starting task 1 ===\n");
-            System.Console.WriteLine("Please, enter number of rows for the first matrix: ");
+            System.Console.WriteLine("=== Task 1 ===\n");
+
+            // get matrix1 from user
+            System.Console.WriteLine("Enter number of rows for the first matrix: ");
             int rows = int.Parse(System.Console.ReadLine());
 
-            System.Console.WriteLine("\nPlease, enter number of columns for the first matrix: ");
+            System.Console.WriteLine("Enter number of columns for the first matrix: ");
             int columns = int.Parse(System.Console.ReadLine());
 
-            MyMatrix mm1 = new MyMatrix(rows, columns);
+            // create first matrix
+            MyMatrix matrix1 = new MyMatrix(rows, columns);
 
-            System.Console.WriteLine("\nPlease, enter number of rows for the second matrix: ");
+            // get matrix2 from user
+            System.Console.WriteLine("\nEnter number of rows for the second matrix: ");
             rows = int.Parse(System.Console.ReadLine());
 
-            System.Console.WriteLine("\nPlease, enter number of columns for the second matrix: ");
-            rows = int.Parse(System.Console.ReadLine());
+            System.Console.WriteLine("Enter number of columns for the second matrix: ");
+            columns = int.Parse(System.Console.ReadLine());
 
-            MyMatrix mm2 = new MyMatrix(rows, columns);
-            
-            System.Console.WriteLine("\nMatrix 1: ");
-            mm1.Print();
+            // create matrix2
+            MyMatrix matrix2 = new MyMatrix(rows, columns);
 
-            System.Console.WriteLine("\nMatrix 2: ");
-            mm2.Print();
+            // display matrices
+            System.Console.WriteLine("\nMatrix 1:");
+            matrix1.Print();
 
-            MyMatrix resM = mm1 + mm2;
-            System.Console.WriteLine($"\nResult of summaryzing matrices: ");
-            resM.Print();
+            System.Console.WriteLine("\nMatrix 2:");
+            matrix2.Print();
 
-            resM = mm1 - mm2;
-            System.Console.WriteLine($"\nResult of substracting matrices: ");
-            resM.Print();
+            // matrix addition
+            try
+            {
+                MyMatrix result = matrix1 + matrix2;
+                System.Console.WriteLine("\nMatrix1 + Matrix2:");
+                result.Print();
+            }
+            catch (InvalidOperationException ex)
+            {
+                System.Console.WriteLine($"\nAddition error: {ex.Message}");
+            }
 
-            resM = mm1 * 2;
-            System.Console.WriteLine($"\nResult of multiplying the first matrix by number: ");
-            resM.Print();
+            // matrix subtraction
+            try
+            {
+                MyMatrix result = matrix1 - matrix2;
+                System.Console.WriteLine("\nMatrix1 - Matrix2:");
+                result.Print();
+            }
+            catch (InvalidOperationException ex)
+            {
+                System.Console.WriteLine($"\nSubtraction error: {ex.Message}");
+            }
 
-            resM = 5 * mm2;
-            System.Console.WriteLine($"\nResult of multiplying the second matrix by number: ");
-            resM.Print();
+            // matrix multiplication
+            try
+            {
+                MyMatrix result = matrix1 * matrix2;
+                System.Console.WriteLine("\nMatrix1 * Matrix2:");
+                result.Print();
+            }
+            catch (InvalidOperationException ex)
+            {
+                System.Console.WriteLine($"\nMultiplication error: {ex.Message}");
+            }
 
-            resM = mm1 / 5;
-            System.Console.WriteLine($"\nResult of dividing the first matrix by number: ");
-            resM.Print();
+            // scalar operations
+            MyMatrix scalarResult = matrix1 * 2;
+            System.Console.WriteLine("\nMatrix1 * 2:");
+            scalarResult.Print();
 
-            resM = mm2 / 5;
-            System.Console.WriteLine($"\nResult of dividing the second matrix by number: ");
-            resM.Print();
-
-            resM = mm1 * mm2;
-            System.Console.WriteLine($"\nResult of multiplying matrices: "); 
-            resM.Print();
-
-            System.Console.WriteLine("\nEnding of the first task...");
-            System.Console.WriteLine("Press any key to start the second task...");
-            System.Console.ReadKey();
-            System.Console.Clear();
+            MyMatrix divisionResult = matrix1 / 3;
+            System.Console.WriteLine("\nMatrix1 / 3:");
+            divisionResult.Print();
         }
 
         public static void Task2()
         {
-            // Demonstrating work for the second task
-            System.Console.WriteLine("=== Starting task 2 ===\n");
-            // initialize variables
-            // array of cars
-            Car[] cars =
-            {
+            System.Console.WriteLine("\n=== Task 2: Car Sorting with IComparer ===\n");
+
+            // create car array
+            Car[] cars = {
                 new Car("Toyota Camry", 2020, 210),
                 new Car("BMW M5", 2018, 250),
                 new Car("Audi A5", 2022, 240),
                 new Car("Honda Civic", 2019, 200),
-                new Car("Mercedec G-Class", 2021, 230)
+                new Car("Mercedes G-Class", 2021, 230)
             };
 
-            System.Console.WriteLine("Array of cars: ");
-            for (int i = 0; i < cars.Length; i++) 
+            // display array
+            System.Console.WriteLine("Original array of cars:");
+            foreach (var car in cars)
             {
-                System.Console.WriteLine(cars[i].ToString());
+                System.Console.WriteLine(car);
             }
 
-            // Demonstrating sort by name
-            System.Console.WriteLine("\n=== Sort by Name ===");
-            Array.Sort(cars, new CarComparer(CarComparer.SortBy.Name));
-            for (int i = 0; i < cars.Length; i++) 
+            // demonstrate sorting by different criteria
+
+            System.Console.WriteLine("\n--- Sorted by Name ---");
+            Array.Sort(cars, new CarComparer(CarComparer.SortCriteria.Name));
+            foreach (var car in cars)
             {
-                System.Console.WriteLine(cars[i].ToString());
+                System.Console.WriteLine(car);
             }
 
-            // Demonstrating sort by year
-            System.Console.WriteLine("\n=== Sort by Year ===");
-            Array.Sort(cars, new CarComparer(CarComparer.SortBy.Year));
-            for (int i = 0;i < cars.Length; i++)
+            System.Console.WriteLine("\n--- Sorted by Production Year ---");
+            Array.Sort(cars, new CarComparer(CarComparer.SortCriteria.ProductionYear));
+            foreach (var car in cars)
             {
-                System.Console.WriteLine(cars[i].ToString());
+                System.Console.WriteLine(car);
             }
 
-            // Demonstrating sort by speed
-            System.Console.WriteLine("\n=== Sort by Speed ===");
-            Array.Sort(cars, new CarComparer(CarComparer.SortBy.Speed));
-            for (int i = 0; i < cars.Length; i++) 
+            System.Console.WriteLine("\n--- Sorted by Max Speed ---");
+            Array.Sort(cars, new CarComparer(CarComparer.SortCriteria.MaxSpeed));
+            foreach (var car in cars)
             {
-                System.Console.WriteLine(cars[i].ToString());
+                System.Console.WriteLine(car);
             }
 
-            // Demonstrating sort by year reverse
-            System.Console.WriteLine("\n=== Sort by Year reverse ===");
-            Array.Sort(cars, new CarComparer(CarComparer.SortBy.Year));
+            // Demonstrate reverse sorting
+            System.Console.WriteLine("\n--- Sorted by Production Year (Descending) ---");
+            Array.Sort(cars, new CarComparer(CarComparer.SortCriteria.ProductionYear));
             Array.Reverse(cars);
-            for (int i = 0; i < cars.Length; i++) 
+            foreach (var car in cars)
             {
-                System.Console.WriteLine(cars[i].ToString());
+                System.Console.WriteLine(car);
+            }
+        }
+
+        public static void Task3()
+        {
+            System.Console.WriteLine("\n=== Task 3: CarCatalog with Iterators ===\n");
+
+            Car[] cars = {
+                new Car("Toyota Camry", 2020, 210),
+                new Car("BMW M5", 2018, 250),
+                new Car("Audi A5", 2022, 240),
+                new Car("Honda Civic", 2019, 200),
+                new Car("Mercedes G-Class", 2021, 230),
+                new Car("Ford Focus", 2020, 190)
+            };
+
+            // create car catalog
+            CarCatalog catalog = new CarCatalog(cars);
+
+            // demonstrating
+            // standard IEnumerable
+            System.Console.WriteLine("1. Forward iteration:");
+            foreach (var car in catalog)
+            {
+                System.Console.WriteLine($"  {car}");
+            }
+
+            // reverse iteration
+            System.Console.WriteLine("\n2. Reverse iteration:");
+            foreach (var car in catalog.GetReverseEnumerator())
+            {
+                System.Console.WriteLine($"  {car}");
+            }
+
+            // filtered iteration by production year
+            System.Console.WriteLine("\n3. Cars from year 2020:");
+            foreach (var car in catalog.GetCarsByProductionYear(2020))
+            {
+                System.Console.WriteLine($"  {car}");
+            }
+
+            // filtered iteration by maximum speed
+            System.Console.WriteLine("\n4. Cars with max speed >= 230 km/h:");
+            foreach (var car in catalog.GetCarsByMaxSpeed(230))
+            {
+                System.Console.WriteLine($"  {car}");
+            }
+
+            // additional demonstration
+            System.Console.WriteLine("\n5. Cars from 2019 to 2021:");
+            foreach (var car in catalog.GetCarsByProductionYearRange(2019, 2021))
+            {
+                System.Console.WriteLine($"  {car}");
             }
         }
 
@@ -127,7 +189,20 @@ namespace LW4.Console
         {
             Task1();
 
+            System.Console.WriteLine("\nPress any key to continue to Task 2...");
+            System.Console.ReadKey();
+            System.Console.Clear();
+
             Task2();
+
+            System.Console.WriteLine("\nPress any key to continue to Task 3...");
+            System.Console.ReadKey();
+            System.Console.Clear();
+
+            Task3();
+
+            System.Console.WriteLine("\nPress any key to exit...");
+            System.Console.ReadKey();
         }
     }
 }

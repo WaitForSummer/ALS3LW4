@@ -4,65 +4,68 @@ namespace LW4
 {
     public class Car
     {
-        // init prop
+        // auto-properties
         public string Name { get; set; }
-        public int Year { get; set; }
-        public int Speed { get; set; }
+        public int ProductionYear { get; set; }
+        public int MaxSpeed { get; set; }
 
         // constructor
-        public Car(string name, int year, int speed)
+        public Car(string name, int productionYear, int maxSpeed)
         {
             Name = name;
-            Year = year;
-            Speed = speed;
+            ProductionYear = productionYear;
+            MaxSpeed = maxSpeed;
         }
 
+        // overridden ToString
         public override string ToString()
         {
-            return $"{Name} ({Year}), Max Speed: {Speed} km/h";
+            return $"{Name} ({ProductionYear}), Max Speed: {MaxSpeed} km/h";
         }
     }
 
-    public class CarComparer: IComparer<Car>
+    // comparer
+    public class CarComparer : IComparer<Car>
     {
-        public enum SortBy
+        public enum SortCriteria
         {
-            Name, Year, Speed
+            Name,
+            ProductionYear,
+            MaxSpeed
         }
 
-        private SortBy sortCrit;
+        private SortCriteria criteria;
 
-        public CarComparer(SortBy sort)
+        public CarComparer(SortCriteria criteria)
         {
-            sortCrit = sort;
+            this.criteria = criteria;
         }
 
-        public int Compare(Car x, Car y) 
-        { 
-            if (x == null &&  y == null) return 0;
+        // realize Compare method
+        public int Compare(Car x, Car y)
+        {
+            if (x == null && y == null) return 0;
             if (x == null) return -1;
             if (y == null) return 1;
 
-            switch (sortCrit)
+            // compare based on selected criteria
+            switch (criteria)
             {
-                case SortBy.Name:
+                case SortCriteria.Name:
                     return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
-
-                case SortBy.Year:
-                    return x.Year.CompareTo(y.Year);
-
-                case SortBy.Speed:
-                    return x.Speed.CompareTo(y.Speed);
-
+                case SortCriteria.ProductionYear:
+                    return x.ProductionYear.CompareTo(y.ProductionYear);
+                case SortCriteria.MaxSpeed:
+                    return x.MaxSpeed.CompareTo(y.MaxSpeed);
                 default:
-                    return 0;
+                    // should never reach
+                    return 0; 
             }
         }
     }
 
     public class CarCatalog : IEnumerable<Car>
     {
-        // initializing 
         private Car[] cars;
 
         // constructor
@@ -71,100 +74,60 @@ namespace LW4
             this.cars = cars ?? throw new ArgumentNullException(nameof(cars));
         }
 
-        // overriden user indexator
-        public Car this[int ind]
-        {
-            get
-            {
-                if (ind < 0 || ind >= cars.Length)
-                    throw new ArgumentOutOfRangeException("Oops! Index  Out of range");
-                return cars[ind];
-            }
-            set 
-            { 
-                if (ind < 0 || ind >= cars.Length)
-                    throw new ArgumentOutOfRangeException("Oops! Index out of range");
-                cars[ind] = value;
-            }
-        }
-
-        // foreach from the first to last
+        // forward iteration from first to last element
         public IEnumerator<Car> GetEnumerator()
         {
-            foreach (var car in this.cars)
+            foreach (var car in cars)
             {
                 yield return car;
             }
         }
 
+        // explicit interface
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        // reverse foreach
-        public IEnumerable<Car> Reverse()
+        // reverse iteration from last to first element
+        public IEnumerable<Car> GetReverseEnumerator()
         {
-            for (int i = this.cars.Length - 1; i >= 0; i--)
+            for (int i = cars.Length - 1; i >= 0; i--)
             {
-                yield return this.cars[i];
+                yield return cars[i];
             }
         }
 
-        // sort by year
-        public IEnumerable<Car> FilterByProductionYear(int year)
+        // iteration with production year filter
+        public IEnumerable<Car> GetCarsByProductionYear(int year)
         {
-            foreach (var car in this.cars)
+            foreach (var car in cars)
             {
-                if (car.Year == year)
+                if (car.ProductionYear == year)
                 {
                     yield return car;
                 }
             }
         }
 
-        // sort by year diap
-        public IEnumerable<Car> FilterByProductionYearRange(int startYear, int endYear)
+        // iteration with maximum speed filter
+        public IEnumerable<Car> GetCarsByMaxSpeed(int maxSpeed)
         {
-            foreach (var car in this.cars)
+            foreach (var car in cars)
             {
-                if (car.Year >=  startYear && car.Year <= endYear)
+                if (car.MaxSpeed >= maxSpeed)
                 {
                     yield return car;
                 }
             }
         }
 
-        // filter w speed
-        public IEnumerable<Car> FilterByMaxSpeed (int minSpeed)
+        // addition method with speed range 
+        public IEnumerable<Car> GetCarsByProductionYearRange(int startYear, int endYear)
         {
-            foreach(var car in this.cars)
+            foreach (var car in cars)
             {
-                if (car.Speed >=  minSpeed)
-                {
-                    yield return car;
-                }
-            }
-        }
-
-        // filter w speed range
-        public IEnumerable<Car> FilterByMaxSpeedRange (int minSpeed, int maxSpeed)
-        {
-            foreach (var car in this.cars)
-            {
-                if (car.Speed >= minSpeed && car.Speed <= maxSpeed)
-                {
-                    yield return car;
-                }
-            }
-        }
-        
-        // filter by name
-        public IEnumerable<Car> FilterByName(string name)
-        {
-            foreach (var car in this.cars)
-            {
-                if (car.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                if (car.ProductionYear >= startYear && car.ProductionYear <= endYear)
                 {
                     yield return car;
                 }

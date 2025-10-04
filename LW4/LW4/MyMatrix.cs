@@ -1,189 +1,167 @@
 ﻿using System;
-using System.Runtime.Serialization.Formatters;
 
 namespace LW4
 {
     public class MyMatrix
     {
-        // fields
-        // row
-        private int m; 
-        // column
-        private int n;
+        // Private fields
+        private int rows;
+        private int columns;
         private double[,] matrix;
-        
-        // Constructor
-        public MyMatrix(int m, int n)
+
+        // Main constructor - creates matrix with user-specified dimensions
+        public MyMatrix(int rows, int columns)
         {
-            // Check for correct params
-            if (m <= 0 || n <= 0)
-                throw new ArgumentException("Count of n or/and m must be >0");
+            // Validate parameters
+            if (rows <= 0 || columns <= 0)
+                throw new ArgumentException("Count of rows and columns must be greater than 0");
 
-            // initializing
-            this.m = m;
-            this.n = n;
-            matrix = new double[m, n];
+            // Initialize matrix
+            this.rows = rows;
+            this.columns = columns;
+            matrix = new double[rows, columns];
 
-            // Entering min value
-            Console.WriteLine("\nEnter min value for elements: ");
+            // Get value range from user
+            Console.WriteLine("\nEnter minimum value for matrix elements: ");
             double min = double.Parse(Console.ReadLine());
 
-            // Entering max value
-            Console.WriteLine("\nEnter max value for elements: ");
+            Console.WriteLine("\nEnter maximum value for matrix elements: ");
             double max = double.Parse(Console.ReadLine());
 
-            // filling elements w rand values
+            // Fill matrix with random values
             Random random = new Random();
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++)
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < columns; j++)
                     matrix[i, j] = random.NextDouble() * (max - min) + min;
         }
 
-        // constructor for tests
-        public MyMatrix(int m, int n, double min, double max)
+        // Used for unit testing without user input
+        public MyMatrix(int rows, int columns, double min, double max)
         {
-            if (m <= 0 || n <= 0)
-                throw new ArgumentException("Count of m and n must be > 0");
+            if (rows <= 0 || columns <= 0)
+                throw new ArgumentException("Count of rows and columns must be greater than 0");
 
-            this.m = m;
-            this.n = n;
-            matrix = new double[m, n];
+            this.rows = rows;
+            this.columns = columns;
+            matrix = new double[rows, columns];
 
             Random random = new Random();
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++)
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < columns; j++)
                     matrix[i, j] = random.NextDouble() * (max - min) + min;
         }
 
-        // Properties for values
-        public int Rows => m;
-        public int Columns => n;
+        // Public properties
+        public int Rows => rows;
+        public int Columns => columns;
 
-        // user indexator
-        public double this[int row, int col]
+        // user indexer
+        public double this[int row, int column]
         {
             get
             {
-                if (row < 0 || row >= m || col < 0 || col >= n)
-                    throw new IndexOutOfRangeException("Oops! Index out of range");
-                return matrix[row, col];
+                if (row < 0 || row >= rows || column < 0 || column >= columns)
+                    throw new IndexOutOfRangeException("Matrix index is out of range");
+                return matrix[row, column];
             }
             set
             {
-                if (row < 0 || row >= m || col < 0 || col >= n)
-                    throw new IndexOutOfRangeException("Oops! Index out of range");
-                matrix[row, col] = value;
+                if (row < 0 || row >= rows || column < 0 || column >= columns)
+                    throw new IndexOutOfRangeException("Matrix index is out of range");
+                matrix[row, column] = value;
             }
         }
 
         // Overriden operators
-        // overrriden summary operator
+        // Matrix addition operator
         public static MyMatrix operator +(MyMatrix a, MyMatrix b)
         {
-            // checking
-            if (a.m != b.m || a.n != b.n)
-                throw new InvalidOperationException("You can only summarize matrices of the same size.");
+            // Validate dimensions compatibility
+            if (a.rows != b.rows || a.columns != b.columns)
+                throw new InvalidOperationException("Matrices must have the same dimensions for addition");
 
-            // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
+            // Create result matrix and perform element-wise addition
+            MyMatrix result = new MyMatrix(a.rows, a.columns, 0, 0);
+            for (int i = 0; i < a.rows; i++)
+                for (int j = 0; j < a.columns; j++)
+                    result.matrix[i, j] = a.matrix[i, j] + b.matrix[i, j];
 
-            // summary 
-            for (int i = 0; i < a.m; i++)
-                for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = a.matrix[i, j] + b.matrix[i, j];
-
-            // returning result
-            return newMatrix;
+            return result;
         }
 
-        // overrriden difference operator
+        // Matrix subtraction operator
         public static MyMatrix operator -(MyMatrix a, MyMatrix b)
         {
-            // checking
-            if (a.n != b.n || a.m != b.m) 
-                throw new InvalidOperationException("You can only substract mattrices of the same size.");
-            // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
+            if (a.rows != b.rows || a.columns != b.columns)
+                throw new InvalidOperationException("Matrices must have the same dimensions for subtraction");
 
-            // summary 
-            for (int i = 0; i < a.m; i++)
-                for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = a.matrix[i, j] - b.matrix[i, j];
+            MyMatrix result = new MyMatrix(a.rows, a.columns, 0, 0);
+            for (int i = 0; i < a.rows; i++)
+                for (int j = 0; j < a.columns; j++)
+                    result.matrix[i, j] = a.matrix[i, j] - b.matrix[i, j];
 
-            // returning result
-            return newMatrix;
+            return result;
         }
 
-        // overriden multiplying by number (matrix from the left side)
-        public static MyMatrix operator*(MyMatrix a, double num)
+        // scalar multiplication (matrix on right, scalar on left)
+        public static MyMatrix operator *(MyMatrix a, double scalar)
         {
-            // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
+            MyMatrix result = new MyMatrix(a.rows, a.columns, 0, 0);
+            for (int i = 0; i < a.rows; i++)
+                for (int j = 0; j < a.columns; j++)
+                    result.matrix[i, j] = a.matrix[i, j] * scalar;
 
-            // multiplying
-            for (int i = 0; i < a.m; i++)
-                for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = a.matrix[i, j] * num;
-
-            // returning result
-            return newMatrix;
+            return result;
         }
 
-        // overriden multiplying by number (number from the left side)
-        public static MyMatrix operator *(double num, MyMatrix a)
+        // scalar multiplication (scalar on left, matrix on right)
+        public static MyMatrix operator *(double scalar, MyMatrix a)
         {
-            return a * num;
+            return a * scalar;
         }
 
-        // overriden dividing by number
-        public static MyMatrix operator /(MyMatrix a, double num)
+        // scalar division
+        public static MyMatrix operator /(MyMatrix a, double scalar)
         {
-            // checking
-            if (num == 0)
-                throw new DivideByZeroException("Sudenly, you can't divide by zero(((");
-            // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, a.n, 0, 0);
+            if (scalar == 0)
+                throw new DivideByZeroException("Division by zero is not allowed");
 
-            // multiplying
-            for (int i = 0; i < a.m; i++)
-                for (int j = 0; j < a.n; j++)
-                    newMatrix.matrix[i, j] = a.matrix[i, j] / num;
+            MyMatrix result = new MyMatrix(a.rows, a.columns, 0, 0);
+            for (int i = 0; i < a.rows; i++)
+                for (int j = 0; j < a.columns; j++)
+                    result.matrix[i, j] = a.matrix[i, j] / scalar;
 
-            // returning result
-            return newMatrix;
+            return result;
         }
 
-        // overriden multiplying among matrix
+        // multiplication operator
         public static MyMatrix operator *(MyMatrix a, MyMatrix b)
         {
-            // checking
-            if (a.n != b.m)
-                throw new InvalidOperationException("Wrong matrix to multiplying");
+            if (a.columns != b.rows)
+                throw new InvalidOperationException("Number of columns in first matrix must equal number of rows in second matrix for multiplication");
 
-            // initializing
-            MyMatrix newMatrix = new MyMatrix(a.m, b.n, 0, 0);
+            // Create result matrix 
+            MyMatrix result = new MyMatrix(a.rows, b.columns, 0, 0);
 
-            // multiplying
-            for (int i = 0; i < a.m; ++i)
+            for (int i = 0; i < a.rows; i++)
             {
-                for (int j = 0; j < b.n; ++j)
+                for (int j = 0; j < b.columns; j++)
                 {
                     double sum = 0;
-                    for (int k = 0; k < a.n; ++k)
+                    for (int k = 0; k < a.columns; k++)
                         sum += a.matrix[i, k] * b.matrix[k, j];
-
-                    newMatrix.matrix[i, j] = sum;
+                    result.matrix[i, j] = sum;
                 }
             }
-            return newMatrix;
+            return result;
         }
 
-        // method for outputting result
+        // Print matrix
         public void Print()
         {
-            for (int i = 0; i < m; ++i)
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j <  n; ++j)
+                for (int j = 0; j < columns; j++)
                 {
                     Console.Write($"{matrix[i, j]:F2}\t");
                 }
