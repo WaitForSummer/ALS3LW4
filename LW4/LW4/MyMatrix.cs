@@ -4,38 +4,37 @@ namespace LW4
 {
     public class MyMatrix
     {
-        // Private fields
+        // private fields
         private int rows;
         private int columns;
         private double[,] matrix;
 
-        // Main constructor - creates matrix with user-specified dimensions
+        // main constructor
         public MyMatrix(int rows, int columns)
         {
-            // Validate parameters
             if (rows <= 0 || columns <= 0)
                 throw new ArgumentException("Count of rows and columns must be greater than 0");
 
-            // Initialize matrix
+            // init matrix
             this.rows = rows;
             this.columns = columns;
             matrix = new double[rows, columns];
 
-            // Get value range from user
+            // get value range
             Console.WriteLine("\nEnter minimum value for matrix elements: ");
             double min = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\nEnter maximum value for matrix elements: ");
             double max = double.Parse(Console.ReadLine());
 
-            // Fill matrix with random values
+            // fill matrix with random values
             Random random = new Random();
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++)
                     matrix[i, j] = random.NextDouble() * (max - min) + min;
         }
 
-        // Used for unit testing without user input
+        // used for testing
         public MyMatrix(int rows, int columns, double min, double max)
         {
             if (rows <= 0 || columns <= 0)
@@ -51,7 +50,7 @@ namespace LW4
                     matrix[i, j] = random.NextDouble() * (max - min) + min;
         }
 
-        // Public properties
+        // public properties
         public int Rows => rows;
         public int Columns => columns;
 
@@ -73,14 +72,12 @@ namespace LW4
         }
 
         // Overriden operators
-        // Matrix addition operator
+        // addition operator
         public static MyMatrix operator +(MyMatrix a, MyMatrix b)
         {
-            // Validate dimensions compatibility
             if (a.rows != b.rows || a.columns != b.columns)
                 throw new InvalidOperationException("Matrices must have the same dimensions for addition");
 
-            // Create result matrix and perform element-wise addition
             MyMatrix result = new MyMatrix(a.rows, a.columns, 0, 0);
             for (int i = 0; i < a.rows; i++)
                 for (int j = 0; j < a.columns; j++)
@@ -89,7 +86,7 @@ namespace LW4
             return result;
         }
 
-        // Matrix subtraction operator
+        // subtraction operator
         public static MyMatrix operator -(MyMatrix a, MyMatrix b)
         {
             if (a.rows != b.rows || a.columns != b.columns)
@@ -140,7 +137,6 @@ namespace LW4
             if (a.columns != b.rows)
                 throw new InvalidOperationException("Number of columns in first matrix must equal number of rows in second matrix for multiplication");
 
-            // Create result matrix 
             MyMatrix result = new MyMatrix(a.rows, b.columns, 0, 0);
 
             for (int i = 0; i < a.rows; i++)
@@ -156,7 +152,7 @@ namespace LW4
             return result;
         }
 
-        // Print matrix
+        // print matrix
         public void Print()
         {
             for (int i = 0; i < rows; i++)
