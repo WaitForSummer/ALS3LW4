@@ -3,30 +3,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LW4.Tests
 {
-    /// <summary>
-    /// Unit tests for MyMatrix class
-    /// Tests constructor, indexer, operators, and edge cases
-    /// </summary>
+    // testing constructor, indexer, operators, and edge cases
     [TestClass]
     public class MyMatrixTests
     {
-        // Test data constants
+        // testing data constants
         private double testMin = 1.0;
         private double testMax = 10.0;
 
-        /// <summary>
-        /// Helper method to create test matrix without user input
-        /// </summary>
         private MyMatrix CreateTestMatrix(int rows, int columns)
         {
             return new MyMatrix(rows, columns, testMin, testMax);
         }
 
-        // Constructor tests
-
-        /// <summary>
-        /// Tests that constructor creates matrix with correct dimensions
-        /// </summary>
+        // constructor tests
+        // testing that constructor creates matrix with correct dimensions
         [TestMethod]
         public void Contructor_ValidDimensions_CreatesMatrixWithCorrectSize()
         {
@@ -36,9 +27,7 @@ namespace LW4.Tests
             Assert.AreEqual(4, matrix.Columns);
         }
 
-        /// <summary>
-        /// Tests that constructor throws exception for negative column count
-        /// </summary>
+        // tesing that constructor throws exception for negative column count
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Constructor_NegativeColumns_ThrowsArgumentException()
@@ -46,9 +35,7 @@ namespace LW4.Tests
             var matrix = CreateTestMatrix(2, -1);
         }
 
-        /// <summary>
-        /// Tests that constructor throws exception for zero row count
-        /// </summary>
+        // testing that constructor throws exception for zero row count
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Constructor_ZeroRows_ThrowsArgumentExceprion()
@@ -56,11 +43,8 @@ namespace LW4.Tests
             var matrix = CreateTestMatrix(0, 3);
         }
 
-        // Indexer tests
-
-        /// <summary>
-        /// Tests that indexer correctly retrieves values
-        /// </summary>
+        // Indexer testing
+        // testing that indexer correctly retrieves values
         [TestMethod]
         public void Indexer_GetValidElement_ReturnsCorrectValue()
         {
@@ -72,9 +56,7 @@ namespace LW4.Tests
             Assert.AreEqual(10.2, matrix[1, 1]);
         }
 
-        /// <summary>
-        /// Tests that indexer correctly sets values
-        /// </summary>
+        // testing that indexer correctly sets values
         [TestMethod]
         public void Indexer_SetValidElement_ChangeValue()
         {
@@ -86,9 +68,7 @@ namespace LW4.Tests
             Assert.AreEqual(newValue, matrix[1, 0]);
         }
 
-        /// <summary>
-        /// Tests that indexer throws exception for invalid row access
-        /// </summary>
+        // testing that indexer throws exception for invalid row access
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void Indexer_GetInvalidRow_ThrowsIndexOutOfRange()
@@ -98,9 +78,7 @@ namespace LW4.Tests
             var value = matrix[5, 0];
         }
 
-        /// <summary>
-        /// Tests that indexer throws exception for invalid column access
-        /// </summary>
+        // testing that indexer throws exception for invalid column access
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void Indexer_SetInvalidColumn_ThrowsIndexOutOfRangeExceprion()
@@ -111,17 +89,13 @@ namespace LW4.Tests
         }
 
         // Operator tests
-
-        /// <summary>
-        /// Tests matrix addition with same-sized matrices
-        /// </summary>
+        // testing matrix addition
         [TestMethod]
         public void Addition_SameSizeMatrices_ReturnsCorrectSumNatrix()
         {
             var matrix1 = new MyMatrix(2, 2, 0, 0);
             var matrix2 = new MyMatrix(2, 2, 0, 0);
 
-            // Set up test data
             matrix1[0, 0] = 1; matrix1[0, 1] = 2;
             matrix1[1, 0] = 3; matrix1[1, 1] = 4;
 
@@ -130,16 +104,13 @@ namespace LW4.Tests
 
             var result = matrix1 + matrix2;
 
-            // Verify addition results
             Assert.AreEqual(6, result[0, 0]);
             Assert.AreEqual(8, result[0, 1]);
             Assert.AreEqual(10, result[1, 0]);
             Assert.AreEqual(12, result[1, 1]);
         }
 
-        /// <summary>
-        /// Tests that addition throws exception for different-sized matrices
-        /// </summary>
+        // testing addition throws exception for different-sized matrices
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Addition_DifferenceSizeMatrices_ThrowsInvalidOperationException()
@@ -149,8 +120,5 @@ namespace LW4.Tests
 
             var result = matrix1 + matrix2;
         }
-
-        // Additional test methods would have similar English comments...
-        // [Rest of the test methods with English comments]
     }
 }

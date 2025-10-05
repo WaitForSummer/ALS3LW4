@@ -81,7 +81,7 @@
 
         public static void Task2()
         {
-            System.Console.WriteLine("\n=== Task 2: Car Sorting with IComparer ===\n");
+            System.Console.WriteLine("\n=== Task 2 ===\n");
 
             // create car array
             Car[] cars = {
@@ -100,7 +100,6 @@
             }
 
             // demonstrate sorting by different criteria
-
             System.Console.WriteLine("\n--- Sorted by Name ---");
             Array.Sort(cars, new CarComparer(CarComparer.SortCriteria.Name));
             foreach (var car in cars)
@@ -134,7 +133,7 @@
 
         public static void Task3()
         {
-            System.Console.WriteLine("\n=== Task 3: CarCatalog with Iterators ===\n");
+            System.Console.WriteLine("\n=== Task 3 ===\n");
 
             Car[] cars = {
                 new Car("Toyota Camry", 2020, 210),

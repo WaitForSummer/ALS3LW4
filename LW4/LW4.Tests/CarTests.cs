@@ -52,7 +52,4 @@ namespace LW4.Tests
             Assert.AreEqual(300, car.MaxSpeed);
         }
     }
-
-    // Additional test classes would have similar English comments...
-    // [Rest of the test classes with English comments]
 }
